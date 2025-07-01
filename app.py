@@ -17,7 +17,7 @@ INSTANCE_ID = uuid.uuid4()
 
 st.set_page_config(page_title="Web Scraper App", layout="wide", page_icon="🕷️")
 st.title("🕷️ Web Scraper Dashboard App")
-st.logo("./assets/logo.svg")
+st.logo("./assets/logo.svg", size="large")
 
 # # Style custom
 st.markdown(
