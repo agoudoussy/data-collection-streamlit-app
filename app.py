@@ -9,6 +9,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import re
 import uuid
 from requests import get
+from requests import post
 
 DATA_FOLDER = "data"
 KOBOTOOLBOX_TOKEN = "b9213902dbef007b15c310d7c87db94cbb1c42a6"
@@ -64,7 +65,7 @@ def send_to_kobo(name, rating, comment):
             "Votre_commentaire": comment,
         },
     }
-    response = requests.post(url, json=payload, headers=headers, verify=True)
+    response = post(url, json=payload, headers=headers, verify=True)
     return response.status_code == 201
 
 
@@ -110,8 +111,8 @@ with tab1:
             selected_file = st.selectbox("🗂️ Choisir un fichier CSV", files)
 
             if selected_file:
-                filepath = os.path.join(DATA_FOLDER, selected_file)
-                df = pd.read_csv(filepath).fillna("non disponible")
+                filepath = os.path.join(DATA_FOLDER, selected_file)  #
+                df = pd.read_csv(filepath)
                 dfclean = df.drop(
                     ["pagination", "web-scraper-order", "web-scraper-start-url"],
                     axis=1,
