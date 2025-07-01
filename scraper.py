@@ -5,6 +5,8 @@ from selenium.webdriver.chrome.options import Options
 import pandas as pd
 import streamlit as st
 import time
+from requests import get
+from bs4 import BeautifulSoup as bs
 
 
 def scrape_data(url, nb_pages=3):
@@ -50,3 +52,31 @@ def scrape_data(url, nb_pages=3):
 
     driver.quit()
     return pd.DataFrame(all_data)
+
+def scrap_data(url):
+    html_code= get(url)
+    soup=bs(html_code.text,"html.parser")
+    containers =soup.find_all("div",class_ ="col s6 m4 l3")
+    paginations =soup.find("li",class_="pagination-number")
+
+    data =[]
+    for page in range(len(paginations)):
+        for container in containers:
+            try:
+                title =container.find("p", class_="ad__card-description").a.text
+                price =container.find("p",class_="ad__card-price").a.text
+                adress =container.find("p", class_="ad__card-location").span.text
+                img_src=container.find("img",class_="ad__card-img").get("src")
+            
+                dic={
+                    "title":title,
+                    "price":price,
+                    "adress":adress,
+                    "img-url":img_src
+                }
+                data.append(dic)
+            except:
+                pass
+
+    df = pd.DataFrame(data)
+    df.dropna()
