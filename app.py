@@ -233,20 +233,31 @@ with tab2:
 
 # ----------------- TAB 4 : Feedback ---------------------
 with tab3:
-    st.header("Formulaire d'évaluation")
+    st.header("📝 Formulaire d'évaluation")
+    st.markdown("Votre avis nous aide à améliorer l'application!")
+
     with st.form("feedback_form"):
-        name = st.text_input("Votre nom (facultatif)")
-        rating = st.slider("Notez cette application", 1, 5, 3)
-        comment = st.text_area("Commentaires / Suggestions")
-        if st.form_submit_button("Envoyer"):
-            success = send_to_kobo(name, rating, comment)
-            if success:
-                st.success("Merci pour votre retour 💬 !")
-                st.balloons()
-            else:
-                st.error(
-                    f"❌ Erreur survenue lors de la soummission de votre evaluation merci de reesayer"
-                )
+        name = st.text_input(
+            "Votre nom (facultatif)", placeholder="Entrez votre nom..."
+        )
+        rating = st.slider("Notez cette application (1-5)", 1, 5, 3)
+        comment = st.text_area(
+            "Commentaires / Suggestions",
+            placeholder="Partagez vos commentaires ou suggestions...",
+            height=100,
+        )
+
+        submitted = st.form_submit_button("📤 Envoyer l'évaluation")
+
+        if submitted:
+            with st.spinner("Envoi en cours..."):
+                success = send_to_kobo(name, rating, comment)
+
+                if success:
+                    st.success("🎉 Merci pour votre retour!")
+                    st.balloons()
+                else:
+                    st.error("❌ Erreur lors de l'envoi. Veuillez réessayer plus tard.")
 
 st.markdown("---")
 st.markdown("*Web Scraper Dashboard - Développé avec ❤️ par abdoul*")
